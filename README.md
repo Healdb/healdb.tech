@@ -1,4 +1,4 @@
-## Welcome to GitHub Pages
+## Benjamin Heald
 
 You can use the [editor on GitHub](https://github.com/Healdb/healdb.tech/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
@@ -23,7 +23,7 @@ Syntax highlighted code block
 
 **Bold** and _Italic_ and `Code` text
 
-[Link](url) and ![Image](src)
+[Link](url) and ![Image](https://raw.githubusercontent.com/Healdb/healdb.tech/master/56549547_2268951513126636_6099004554190258176_n.jpg)
 ```
 
 For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
