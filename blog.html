@@ -49,7 +49,7 @@
         <a href="https://github.com/michenriksen/aquatone">Aquatone</a>
         <a href="https://www.google.com/chrome/">Google Chrome</a>
         <h3>Overview</h3>
-        <p>While participating in an undiscosed bug bounty program, I discovered a subdomain with the name "mc.****.************.com. Using Aquatone, I found that port 80,443 were open and displaying the following login page.</p>
+        <p>While participating in an undiscosed bug bounty program, I discovered a subdomain with the name "mc.****.************.com". Using Aquatone, I found that ports 80 and 443 were open and displaying the following login page.</p>
         <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20login.png" alt="Teradici Login page"/>
         <p> Seeing that the application was built using some kind of Javascript framework, I used the Chrome developer utilities to examine the routing files, to see if there were any interesting endpoints.</p>
         <p> To my surprise, there was a route to an endpoint called "/login/resetadminpassword" that was not programmed to redirect back to the login page.</p>
