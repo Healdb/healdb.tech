@@ -53,7 +53,7 @@
         <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20login.png" alt="Teradici Login page"/>
         <p> Seeing that the application was built using some kind of Javascript framework, I used the Chrome developer utilities to examine the routing files, to see if there were any interesting endpoints.</p>
         <p> To my surprise, there was a route to an endpoint called "/login/resetadminpassword" that was not programmed to redirect back to the login page.</p>
-        <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20routing%20js.png" alt="Teradici routing.js"/>
+        <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20routing.png" alt="Teradici routing.js"/>
         <p> Visiting this link, I was even more suprised to be presented with a form to reset the Admin user's password. Using this form, any unauthenticated user was able to change the admin user's password. </p>
         <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20reset%20admin.png" alt="Teradici Reset admin page"/>
         <p>This password could then be used to compromise the Teradici Management Console, and can take control of PCoIP Zero Clients and PCoIP Remote Workstation Cards managed by it.</p>
