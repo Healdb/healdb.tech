@@ -42,7 +42,7 @@
         <h3>Vendor and impacted product</h3>
         <p><a href="https://www.teradici.com/">Teradici</a> - PCoIP Management Console version 20.01.0 and 19.11.1<p>
         <h3>Introduction</h3>
-      <p>I recently discovered a simple vulnerability that had critical impact. This vulnerability was on a software package owned by a major vendor, Teradici, and so it was fortunate enough to be issued CVE-2020-10965. The impact of this vulnerability is critical, as any unauthenticated user could take complete control of the corporations remote workstations and other system clients. Within this post I will outline the methods I used to discover this vulnerability.</p>
+      <p>After nearly five years of working with Application Security I was finally able to discover a security bug worthy of a CVE.  This vulnerability was on a software package owned by a major vendor, Teradici, which provides management software for several different kind of remote workstation setups. The impact of this bug is critical, with almost no attacker interaction needed. Once reported to Mitre, this vulnerability was issued CVE-2020-10965. Whithin this blog post, I'll be giving an overview of the discovery process.
         <h3>Tools Used:
         </h3>
         <a href="https://portswigger.net/burp"><p>Burp Suite</p></a>
@@ -56,7 +56,6 @@
         <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20routing.png" alt="Teradici routing.js"/>
         <p> Visiting this link, I was even more surprised to be presented with a form to reset the Admin user's password. Using this form, any unauthenticated user was able to change the admin user's password. </p>
         <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20reset%20admin.png" alt="Teradici Reset admin page"/>
-        <p>This password could then be used to compromise the Teradici Management Console, and can take control of PCoIP Zero Clients and PCoIP Remote Workstation Cards managed by it.</p>
         
         <h3>Impact</h3>
         <p>From the Teradici disclosure, the impact was described as the following:</p>
