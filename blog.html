@@ -39,16 +39,35 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h2 id="benjamin-heald">Blog Post #1</h2>
+        <h3>Vendor and impacted product</h3>
+        <p>Teradici - PCoIP Management Console version 20.01.0 and 19.11.1<p>
         <h3>Introduction</h3>
-      <p>I recently discovered a simple vulnerability that had critical impact. This vulnerability was on a software package owned by a major vendor, and so it was fortunate enough to be issued a CVE, CVE-2020-10965. In this post I will outline the methods I used to discover this vulnerbaility.</p>
+      <p>I recently discovered a simple vulnerability that had critical impact. This vulnerability was on a software package owned by a major vendor, Teradici, and so it was fortunate enough to be issued a CVE, CVE-2020-10965. The impact of this vulnerability is critical, as any unauthenticated user could take complete control of the coroporations remote workstations and other system clients. this post I will outline the methods I used to discover this vulnerbaility.</p>
         <h3>Tools Used:
         </h3>
         <p>Burp Suite</p>
-          <p> Aquatone</p>
+        <p> Aquatone</p>
+        <p>Google Chrome</p>
         <h3>Overview</h3>
-        <p>While participating in an undiscosed bug bounty program, I discovered a subdomain with the name "mc.test.************.com. Using Aquatone, I found that port 80,443 were open and displaying the following login page.</p>
-
-
+        <p>While participating in an undiscosed bug bounty program, I discovered a subdomain with the name "mc.****.************.com. Using Aquatone, I found that port 80,443 were open and displaying the following login page.</p>
+        <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20login.png" alt="Teradici Login page"/>
+        <p> Seeing that the application was built using some kind of Javascript framework, I used the Chrome developer utilities to examine the routing files, to see if there were any interesting endpoints.</p>
+        <p> To my surprise, there was a route to an endpoint called "/login/resetadminpassword" that was not programmed to redirect back to the login page.</p>
+        <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20routing%20js.png" alt="Teradici routing.js"/>
+        <p> Visiting this link, I was even more suprised to be presented with a form to reset the Admin user's password. Using this form, any unauthenticated user was able to change the admin user's password. </p>
+        <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20reset%20admin.png" alt="Teradici Reset admin page"/>
+        <p>This password could then be used to compromise the Teradici Management Console, and can take control of PCoIP Zero Clients and PCoIP Remote Workstation Cards managed by it.</p>
+        <h3>Disclosure Timeline</h3>
+        <p>29 Feb 2020: Reported vulnerability to bug bounty program, believing it to be specific to their installation. </p>
+        <p>29 Feb 2020: Reported vulnerability to Teradici, upon learning that the vulnerability affected the entire version.</p>
+        <p>03 Mar 2020: First response from Teradici, triaging the vulnerability.</p>
+        <p>04 Mar 2020: Teradici awards a bounty of $1000</p>
+        <p>05 Mar 2020: Teradici releases patched version of product.</p>
+        <p>07 Mar 2020: Initial bug bounty program fixes their installation of the application, awarded $350.</p>
+        <p>13 Mar 2020: Teradici releases public notice of vulnerability on their website <a href="https://help.teradici.com/s/article/3729">here.</a></p>
+        <h3>References</h3>
+        <a href="https://help.teradici.com/s/article/3729">Teradici Vulnerability Disclosure</a>
+        <p>
       </section>
     </div>
 
