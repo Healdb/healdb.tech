@@ -40,9 +40,9 @@
       <section id="main_content" class="inner">
         <h2 id="benjamin-heald">Blog Post #1</h2>
         <h3>Vendor and impacted product</h3>
-        <p>Teradici - PCoIP Management Console version 20.01.0 and 19.11.1<p>
+        <p><a href="https://www.teradici.com/">Teradici</a> - PCoIP Management Console version 20.01.0 and 19.11.1<p>
         <h3>Introduction</h3>
-      <p>I recently discovered a simple vulnerability that had critical impact. This vulnerability was on a software package owned by a major vendor, Teradici, and so it was fortunate enough to be issued a CVE, CVE-2020-10965. The impact of this vulnerability is critical, as any unauthenticated user could take complete control of the coroporations remote workstations and other system clients. this post I will outline the methods I used to discover this vulnerbaility.</p>
+      <p>I recently discovered a simple vulnerability that had critical impact. This vulnerability was on a software package owned by a major vendor, Teradici, and so it was fortunate enough to be issued CVE-2020-10965. The impact of this vulnerability is critical, as any unauthenticated user could take complete control of the coroporations remote workstations and other system clients. Within this post I will outline the methods I used to discover this vulnerbaility.</p>
         <h3>Tools Used:
         </h3>
         <a href="https://portswigger.net/burp">Burp Suite</a>
@@ -57,14 +57,18 @@
         <p> Visiting this link, I was even more suprised to be presented with a form to reset the Admin user's password. Using this form, any unauthenticated user was able to change the admin user's password. </p>
         <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20reset%20admin.png" alt="Teradici Reset admin page"/>
         <p>This password could then be used to compromise the Teradici Management Console, and can take control of PCoIP Zero Clients and PCoIP Remote Workstation Cards managed by it.</p>
+        
+        <h3>Impact</h3>
+        <p>From the Teradici disclosure, the impact was described as the following:</p>
+        <p>"The affected Management Console releases allow unauthenticated user access to the Management Console /login/resetadminpassword URL. From here, unauthenticated users can reset the admin password on the Management Console, and can take control of PCoIP Zero Clients and PCoIP Remote Workstation Cards managed by it."</p>
         <h3>Disclosure Timeline</h3>
-        <p>29 Feb 2020: Reported vulnerability to bug bounty program, believing it to be specific to their installation. </p>
-        <p>29 Feb 2020: Reported vulnerability to Teradici, upon learning that the vulnerability affected the entire version.</p>
-        <p>03 Mar 2020: First response from Teradici, triaging the vulnerability.</p>
-        <p>04 Mar 2020: Teradici awards a bounty of $1000</p>
-        <p>05 Mar 2020: Teradici releases patched version of product.</p>
-        <p>07 Mar 2020: Initial bug bounty program fixes their installation of the application, awarded $350.</p>
-        <p>13 Mar 2020: Teradici releases public notice of vulnerability on their website <a href="https://help.teradici.com/s/article/3729">here.</a></p>
+        <h5>29 Feb 2020:</h5> <p>Reported vulnerability to bug bounty program, believing it to be specific to their installation. </p>
+        <h5>29 Feb 2020:</h5> <p>Reported vulnerability to Teradici, upon learning that the vulnerability affected the entire version.</p>
+        <h5>03 Mar 2020:</h5> <p>First response from Teradici, triaging the vulnerability.</p>
+        <h5>04 Mar 2020:</h5> <p>Teradici awards a bounty of $1000</p>
+        <h5>05 Mar 2020:</h5> <p>Teradici releases patched version of product.</p>
+        <h5>07 Mar 2020:</h5> <p>Initial bug bounty program fixes their installation of the application, awarded $350.</p>
+        <h5>13 Mar 2020:</h5> <p>Teradici releases public notice of vulnerability on their website <a href="https://help.teradici.com/s/article/3729">here.</a></p>
         <h3>References</h3>
         <a href="https://help.teradici.com/s/article/3729">Teradici Vulnerability Disclosure</a>
         <p>
