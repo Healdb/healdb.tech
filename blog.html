@@ -75,14 +75,14 @@
         <p>
       </section>
       <section id="main_content" class="inner">
-        <h2 id="iOSProxyOverSSH">How to examine iOS network traffic over SSH</h2>
+        <h2 id="iOSProxyOverSSH">How to examine iOS network traffic over an iOS cable.</h2>
         <h3>Introduction</h3>
-        <p>In this blog post, I'll be showing you how to run your iOS device traffic through Burp Suite proxy server, even if your local network blocks you from hosting servers. This also allows you to view your iOS device traffic without exposing your Burp Suite proxy listener to the local network. I have found this to be especially useful while traveling, on public wifi networks, or on a network that disallows local network servers.</p>
+        <p>In this blog post, I'll be showing you how to route your iOS device network traffic through Burp Suite proxy listener over your iOS cable. I discovered this while attempting to perform testing on an iOS application while on my college network, that did not allow local network servers. This method allows you to view your iOS device traffic without exposing your Burp Suite proxy listener to the local network, allowing you to test iOS applications securely and quickly, especially when traveling. As an added bonus, I provide a guide on how to overcome Certificate Pinning, which is a way in which iOS developers block their network traffic from being routed through proxy listeners.</p>
         <H3>Tools you'll need.</h3>
         <ul>
         <li><a href="https://portswigger.net/burp"><p>Burp Suite</p></a></li>
         <li><p>A PC capable of running ssh over the command line. This is natively supported on macOS and linux, but you will need to install openSSH on most Windows installations.</p></li>
-        <li><p>A Jailbreakable iOS device. You can check to see if your device is jailbreakable <a href="https://docs.google.com/spreadsheets/d/11DABHIIqwYQKj1L83AK9ywk_hYMjEkcaxpIg6phbTf0/edit#gid=1014970938">here.</a></p></li>
+        <li><p>A Jailbreakable iOS device. This is in general one of the few ways to pentest iOS application that enforce certificate pinning. You can check to see if your device is jailbreakable <a href="https://docs.google.com/spreadsheets/d/11DABHIIqwYQKj1L83AK9ywk_hYMjEkcaxpIg6phbTf0/edit#gid=1014970938">here.</a></p></li>
         </ul>
           <h3>Tutorial</h3>
         <ol>
@@ -90,7 +90,7 @@
         <li><p>Install the following .deb files, or "tweaks" on your Jailbroken iOS device. Tutorials on how to install these files can be found elsewhere on the internet.</p></li>
         <ul>
           <li><a href="https://cydia.saurik.com/package/openssh/"><p>openSSH</p></a></li>
-          <li><a href="https://github.com/nabla-c0d3/ssl-kill-switch2"><p>SSL Kill Switch 2</p></a></li>
+          <li><a href="https://github.com/nabla-c0d3/ssl-kill-switch2"><p>SSL Kill Switch 2 (This allows your device to overcome the Certficate Pinning that many iOS application enforce in order to prevent security researchers from viewing their network traffic.)</p></a></li>
         </ul>  
         <li><p>Go into your iOS device settings, ensure that your device and your PC are on the same wifi network, and set the manual proxy values to "127.0.0.1" for the host and "8080" for the port.</p></li>
          <img src="https://github.com/Healdb/healdb.tech/raw/master/blogImages/ios_proxy_settings.jpg" alt="iOS proxy settings"/>
