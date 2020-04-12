@@ -75,7 +75,39 @@
         <p>
       </section>
       <section id="main_content" class="inner">
-        <h2 id="iOSProxyOverSSH">How to run iOS proxy over SSH</h2>
+        <h2 id="iOSProxyOverSSH">How to examine iOS network traffic over SSH</h2>
+        <h3>Introduction</h3>
+        <p>In this blog post, I'll be showing you how to run your iOS device traffic through Burp Suite proxy server, even if your local network blocks you from hosting servers. This also allows you to view your iOS device traffic without exposing your Burp Suite proxy listener to the local network. I have found this to be especially useful while traveling, on public wifi networks, or on a network that disallows local network servers.</p>
+        <H3>Tools you'll need.</h3>
+        <a href="https://portswigger.net/burp"><p>Burp Suite</p></a>
+        <p>A PC capable of running ssh over the command line. This is natively supported on macOS and linux, but you will need to install openSSH on most Windows installations.</p>
+        <p>A Jailbreakable iOS device. You can check to see if your device is jailbreakable <a href="https://docs.google.com/spreadsheets/d/11DABHIIqwYQKj1L83AK9ywk_hYMjEkcaxpIg6phbTf0/edit#gid=1014970938"><p>here.</p></a></p>
+        <h3>Tutorial</h3>
+
+        <p>Begin by ensuring that your iOS is Jailbroken and can access Cydia. This step is neccessary in order to succesfully follow this tutorial. This is not possible on all iOS devices and software versions, but new Jailbreak methods are constantly being researched, so keep yourself updated.</p>
+        <p>Install the following .deb files, or "tweaks" on your Jailbroken iOS devic. Tutorials on how to install these files can be found elsewhere on the internet.</p>
+        <a href="https://cydia.saurik.com/package/openssh/"><p>openSSH</p></a>
+        <a href="https://github.com/nabla-c0d3/ssl-kill-switch2"><p>SSL Kill Switch 2</p></a>
+        <p>Go into your iOS device settings, ensure that your device and your PC are on the same wifi network, and set the manual proxy values to "127.0.0.1" for the host and "8080" for the port.</p>
+        <p>In your iOS settings, navigate to the SSL Killer preferences and ensure the switch marked "Disable Certificate Validation" is turned on.</p>
+        
+        <p>Install Burp Suite on your computer, you can use the community edition found <a href="https://portswigger.net/burp"><p>here.</p></a></p>
+        <p>Download and install the libimobiledevice binaries onto your device. These binaries will allow you to communicate with your jailbroken iOS device through ssh. Windows binaries can be found <a href="http://docs.quamotion.mobi/docs/imobiledevice/"><p>here.</p></a></p>
+        <p>Open and start Burp Suite, and ensure that the proxy server is running on 127.0.0.1, port 8080.</p>
+        <p>Connect your iOS device to your PC using an official Apple cable.</p>
+        <p>Open a terminal window, change your directory to whereever you downloaded the libimobiledevice binaries, and run the following command:</p>
+        <h5>iproxy 2222 22</h5>
+        <p>In a seperate terminal window, run the following command:</p>
+        <h5>ssh root@127.0.0.1 -p 2222 -R 127.0.0.1:8080:127.0.0.1:8080</h5>
+        <p>This will prompt you for you iOS device's root password, which by default is "alpine". It is genrally recommended that you change this using the "passwd" command once you are connected.</p>
+        <p>These two commands will first instruct iproxy to route all traffic on your PC directed at port 2222 to your iOS device's ssh listener on port 22. Ssh will then connect to this local 2222 port, and instruct the device to begin routing all network traffic routed at 127.0.0.1:8080 to your PC's localhost network.</p>
+        <p>Once these commands have been run and the ssh command has connected to your iOS device successfully, navigate to "http://burp" or 127.0.0.1 on your iOS device.</p>
+        <p>If all the steps above were done correctly, and your Burp Proxy is running correctly on your PC, then you should be greeted with the Burp landing page. You may now follow the official Burp instructions on installing the configuration certificate <a href="https://portswigger.net/support/installing-burp-suites-ca-certificate-in-an-ios-device"><p>here.</p></a></p>
+        <p>Once this is completed, try to navigate to some SSL-secured site and test if you can see the traffic in your Burp Proxy window. If everything was done correctly, it should have no problem connecting. If you do have errors, try closing the application and opening it again. There are a few applications however that the ssl-killer application does not seem to work with. If successful, you should start seeing traffic like below:</p>
+        
+        <p>If you have any trouble with this tutorial, feel free to reach out to me at healdb2@gmail.com for support.</p>
+        
+        
       </section>
     </div>
 
