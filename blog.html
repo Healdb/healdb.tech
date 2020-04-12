@@ -106,8 +106,8 @@
         <img src="https://github.com/Healdb/healdb.tech/raw/master/blogImages/iproxy_command.PNG" alt="iproxy cmd"/>
         <li><p>In a separate terminal window, run the following command:</p></li>
         <h5>ssh root@127.0.0.1 -p 2222 -R 127.0.0.1:8080:127.0.0.1:8080</h5>
+         <img src="https://github.com/Healdb/healdb.tech/raw/master/blogImages/ssh_command.PNG" alt="ssh cmd"/>
         <li><p>This will prompt you for you iOS device's root password, which by default is "alpine". It is generally recommended that you change this using the "passwd" command once you are connected.</p></li>
-        <img src="https://github.com/Healdb/healdb.tech/raw/master/blogImages/ssh_command.PNG" alt="ssh cmd"/>
         <li><p>These two commands will first instruct iproxy to route all traffic on your PC directed at port 2222 to your iOS device's ssh listener on port 22. SSH will then connect to this local 2222 port, and instruct the device to begin routing all network traffic routed at 127.0.0.1:8080 to your PC's localhost network.</p></li>
         <li><p>Once these commands have been run and the ssh command has connected to your iOS device successfully, navigate to "127.0.0.1:8080" on your iOS device.</p></li>
         <img src="https://github.com/Healdb/healdb.tech/raw/master/blogImages/ios_burp_landing.jpg" alt="burp landing"/>
