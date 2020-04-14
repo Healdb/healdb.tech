@@ -134,8 +134,19 @@
         <h2 id="netflixAPI">Database of Netflix ID's</h2>
         <h3>Introduction</h3>
         <p>A few years ago I wanted to make an application that gave the user the power to generate a random episode of any given US Netflix show. The main technical issue with this project was that Netflix does not have a public API and so matching each show or movie with the corresponding ID number found for in every episode or movie link was seemingly impossible. I however was able to find an API endpoint that allowed me to brute-force these ID #'s by simply sending thousands of requests. I have compiled this data into individual files.</p>
-        <p> There are two datasets available. One older dataset that was compiled back in 2017 contains two text files, one which has every netflix show and it's corresponding ID and the same for every netflix movie. This dataset also contains json files, which contain data on each show's individual episodes. The filenames correspond to the show id. </p>
-        <p>The second dataset was compiled in September 2019, and consists of individual JSON files for each show or movie. The titles of these shows and movies have not been compiled, and this will have to be done by parsing them (quite a daunting task considering how many there are). This second dataset is considered much more complete and up to date.</p>
+        <p> There are two datasets available. One older dataset that was compiled back in 2017, and is probably out of date and consists of the following:</p>
+        <ul>
+          <li><p>movietitles.txt - A TXT file containing all Netflix movie titles and associated ID number with seperator "$"</p></li>
+          <li><p>showtitles.txt - A TXT file containing all Netflix series titles and associated ID number with seperator "$"</p></li>
+          <li><p>series.zip - A ZIP file containing files with name corresponding to the ID numbers in series.csv. These files contain a variety of information on the show including all the episode names and ID's.</p></li>
+        </ul>
+        <p>The second dataset was compiled in September 2019 and consists of the following:</p>
+        <ul>
+          <li><p>movies.csv - A CSV file containing all Netflix movie titles and associated ID number</p></li>
+          <li><p>series.csv - A CSV file containing all Netflix series titles and associated ID number</p></li>
+          <li><p>series.zip - A ZIP file containing files with name corresponding to the ID numbers in series.csv. These files contain a variety of information on the show including all the episode names and ID's.</p></li>
+          <li><p>movies.zip - A ZIP file containing files with name corresponding to the ID numbers in movies.csv. These files contain a variety of information on the movie including rating, cast, category, etc.</p></li>
+        </ul>
         <a href="https://drive.google.com/drive/folders/1j1pJnviwdHrS5-9om3o0_DDTKbkwtbv9?usp=sharing"><p>Download the datasets here.</p></a>
         <h3>Methodology</h3>
         <p>In the interest in keeping too many people from accessing the Netflix API endpoint I used to gather these files, please email me at healdb2@gmail.com if you would like to know the methodology I used.</p>
