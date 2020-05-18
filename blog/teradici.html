@@ -1,1 +1,101 @@
 
+
+<!DOCTYPE html>
+<html lang="en-US">
+
+  <head>
+    
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" type="text/css" media="screen" href="/styles.css">
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Benjamin Heald | healdb.tech</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Benjamin Heald" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Benjamin Heald" />
+<meta property="og:description" content="Benjamin Heald" />
+<link rel="canonical" href="http://healdb.tech/" />
+<meta property="og:url" content="http://healdb.tech/" />
+<meta property="og:site_name" content="healdb.tech" />
+<script type="application/ld+json">
+{"@type":"WebSite","url":"http://healdb.tech/","name":"healdb.tech","description":"Benjamin Heald","headline":"Benjamin Heald","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163591048-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-163591048-1');
+</script>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <img src="https://raw.githubusercontent.com/Healdb/healdb.tech/master/Webp.net-resizeimage_1_75.jpg" alt="Image" />
+          <h2 id="project_tagline">Benjamin Heald Personal Security Blog</h2> 
+          <a class="active" href="/"><h3 class="active" id="project_tagline">WHOAMI and Current Resume<h3></a>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2 id="TeradiciCVE">Teradici and CVE-2020-10965: An issue of routing.</h2>
+        <h3>Vendor and impacted product</h3>
+        <p><a href="https://www.teradici.com/">Teradici</a> - PCoIP Management Console version 20.01.0 and 19.11.1<p>
+        <h3>Introduction</h3>
+      <p>After nearly five years of working with Application Security I was finally able to discover a security bug worthy of a CVE.  This vulnerability was in a software package owned by a major vendor, Teradici, which provides management software for several different kinds of remote workstation setups. The impact of this bug is critical, with almost no attacker interaction needed. Once reported to Mitre, this vulnerability was issued CVE-2020-10965. Within this blog post, I'll be giving an overview of the discovery process.
+        <h3>Tools Used:
+        </h3>
+        <a href="https://portswigger.net/burp"><p>Burp Suite</p></a>
+        <a href="https://github.com/michenriksen/aquatone"><p>Aquatone</p></a>
+        <a href="https://www.google.com/chrome/"><p>Google Chrome</p></a>
+        <h3>Overview</h3>
+        <p>While participating in an undisclosed bug bounty program, I discovered a subdomain with the name "mc.****.************.com". Using Aquatone, I found that ports 80 and 443 were open and displaying the following login page.</p>
+        <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20login.png" alt="Teradici Login page"/>
+        <p> Seeing that the application was built using some kind of Javascript framework, I used the Chrome developer utilities to examine the routing files, to see if there were any interesting endpoints.</p>
+        <p> To my surprise, there was a route to an endpoint called "/login/resetadminpassword" that was not programmed to redirect back to the login page.</p>
+        <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20routing.png" alt="Teradici routing.js"/>
+        <p> Visiting this link, I was even more surprised to be presented with a form to reset the Admin user's password. Using this form, any unauthenticated user was able to change the admin user's password. </p>
+        <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20reset%20admin.png" alt="Teradici Reset admin page"/>
+        
+        <h3>Impact</h3>
+        <p>From the Teradici disclosure, the impact was described as the following:</p>
+        <p>"The affected Management Console releases allow unauthenticated user access to the Management Console /login/resetadminpassword URL. From here, unauthenticated users can reset the admin password on the Management Console, and can take control of PCoIP Zero Clients and PCoIP Remote Workstation Cards managed by it."</p>
+        <h3>Disclosure Timeline</h3>
+        <h5>29 Feb 2020:</h5> <p>Reported vulnerability to bug bounty program, believing it to be specific to their installation.</p>
+        <h5>29 Feb 2020:</h5> <p>Reported vulnerability to Teradici, upon learning that the vulnerability affected the entire version.</p>
+        <h5>03 Mar 2020:</h5> <p>First response from Teradici, triaging the vulnerability.</p>
+        <h5>04 Mar 2020:</h5> <p>Teradici awards a bounty of $1000.</p>
+        <h5>05 Mar 2020:</h5> <p>Teradici releases patched version of product.</p>
+        <h5>07 Mar 2020:</h5> <p>Initial bug bounty program fixes their installation of the application, awarded $350.</p>
+        <h5>13 Mar 2020:</h5> <p>Teradici releases public notice of vulnerability on their website <a href="https://help.teradici.com/s/article/3729">here.</a></p>
+        <h3>References</h3>
+        <a href="https://help.teradici.com/s/article/3729"><p>Teradici Vulnerability Disclosure</p></a>
+        <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-10965"><p>MITRE CVE Notice</p></a>
+        <a href="https://nvd.nist.gov/vuln/detail/CVE-2020-10965"><p>National Vulnerability Database CVE Notice</p></a>
+        <p>
+      </section>
+          </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        
+        <p class="copyright">healdb.tech maintained by <a href="https://github.com/Healdb">Healdb</a></p>
+        
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+  </body>
+</html>
