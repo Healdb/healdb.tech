@@ -1,1 +1,169 @@
 
+<!DOCTYPE html>
+<html lang="en-US">
+
+  <head>
+    
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" type="text/css" media="screen" href="/styles.css">
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Benjamin Heald | healdb.tech</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Benjamin Heald" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Benjamin Heald" />
+<meta property="og:description" content="Benjamin Heald" />
+<link rel="canonical" href="http://healdb.tech/" />
+<meta property="og:url" content="http://healdb.tech/" />
+<meta property="og:site_name" content="healdb.tech" />
+<script type="application/ld+json">
+{"@type":"WebSite","url":"http://healdb.tech/","name":"healdb.tech","description":"Benjamin Heald","headline":"Benjamin Heald","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163591048-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-163591048-1');
+</script>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <img src="https://raw.githubusercontent.com/Healdb/healdb.tech/master/Webp.net-resizeimage_1_75.jpg" alt="Image" />
+          <h2 id="project_tagline">Benjamin Heald Personal Security Blog</h2> 
+          <a class="active" href="/"><h3 class="active" id="project_tagline">WHOAMI and Current Resume<h3></a>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2 id="TeradiciCVE">Teradici and CVE-2020-10965: An issue of routing.</h2>
+        <h3>Vendor and impacted product</h3>
+        <p><a href="https://www.teradici.com/">Teradici</a> - PCoIP Management Console version 20.01.0 and 19.11.1<p>
+        <h3>Introduction</h3>
+      <p>After nearly five years of working with Application Security I was finally able to discover a security bug worthy of a CVE.  This vulnerability was in a software package owned by a major vendor, Teradici, which provides management software for several different kinds of remote workstation setups. The impact of this bug is critical, with almost no attacker interaction needed. Once reported to Mitre, this vulnerability was issued CVE-2020-10965. Within this blog post, I'll be giving an overview of the discovery process.
+        <h3>Tools Used:
+        </h3>
+        <a href="https://portswigger.net/burp"><p>Burp Suite</p></a>
+        <a href="https://github.com/michenriksen/aquatone"><p>Aquatone</p></a>
+        <a href="https://www.google.com/chrome/"><p>Google Chrome</p></a>
+        <h3>Overview</h3>
+        <p>While participating in an undisclosed bug bounty program, I discovered a subdomain with the name "mc.****.************.com". Using Aquatone, I found that ports 80 and 443 were open and displaying the following login page.</p>
+        <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20login.png" alt="Teradici Login page"/>
+        <p> Seeing that the application was built using some kind of Javascript framework, I used the Chrome developer utilities to examine the routing files, to see if there were any interesting endpoints.</p>
+        <p> To my surprise, there was a route to an endpoint called "/login/resetadminpassword" that was not programmed to redirect back to the login page.</p>
+        <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20routing.png" alt="Teradici routing.js"/>
+        <p> Visiting this link, I was even more surprised to be presented with a form to reset the Admin user's password. Using this form, any unauthenticated user was able to change the admin user's password. </p>
+        <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20reset%20admin.png" alt="Teradici Reset admin page"/>
+        
+        <h3>Impact</h3>
+        <p>From the Teradici disclosure, the impact was described as the following:</p>
+        <p>"The affected Management Console releases allow unauthenticated user access to the Management Console /login/resetadminpassword URL. From here, unauthenticated users can reset the admin password on the Management Console, and can take control of PCoIP Zero Clients and PCoIP Remote Workstation Cards managed by it."</p>
+        <h3>Disclosure Timeline</h3>
+        <h5>29 Feb 2020:</h5> <p>Reported vulnerability to bug bounty program, believing it to be specific to their installation.</p>
+        <h5>29 Feb 2020:</h5> <p>Reported vulnerability to Teradici, upon learning that the vulnerability affected the entire version.</p>
+        <h5>03 Mar 2020:</h5> <p>First response from Teradici, triaging the vulnerability.</p>
+        <h5>04 Mar 2020:</h5> <p>Teradici awards a bounty of $1000.</p>
+        <h5>05 Mar 2020:</h5> <p>Teradici releases patched version of product.</p>
+        <h5>07 Mar 2020:</h5> <p>Initial bug bounty program fixes their installation of the application, awarded $350.</p>
+        <h5>13 Mar 2020:</h5> <p>Teradici releases public notice of vulnerability on their website <a href="https://help.teradici.com/s/article/3729">here.</a></p>
+        <h3>References</h3>
+        <a href="https://help.teradici.com/s/article/3729"><p>Teradici Vulnerability Disclosure</p></a>
+        <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-10965"><p>MITRE CVE Notice</p></a>
+        <a href="https://nvd.nist.gov/vuln/detail/CVE-2020-10965"><p>National Vulnerability Database CVE Notice</p></a>
+        <p>
+      </section>
+      <section id="main_content" class="inner">
+        <h2 id="iOSProxyOverSSH">How to examine iOS network traffic over an iOS cable.</h2>
+        <h3>Introduction</h3>
+        <p>In this blog post, I'll be showing you how to route your iOS device network traffic through Burp Suite proxy listener over your iOS cable, without the need of a local network proxy. </p>
+          <p>In a normal case, a penetration tester that wants to view the network traffic of a given iOS application would need to connect their phone to their Burp proxy listener that is exposed to the entire local network. Since the listener is exposed to the local network, this creates operational security issues if on a public network, and functional issues if on a network that disallows local servers. This second type of problem is extremely common on university networks, as it was in my case when I first developed this method. </p>
+        <p>Using this guide will allow you to view your iOS device traffic without exposing your Burp Suite proxy listener to the local network, allowing you to test iOS applications securely and quickly, especially when traveling. As an added bonus, I provide a guide on how to overcome Certificate Pinning, which is a way in which iOS developers block their network traffic from being routed through proxy listeners.</p>
+        <H3>Tools you'll need.</h3>
+        <ul>
+        <li><a href="https://portswigger.net/burp"><p>Burp Suite</p></a></li>
+        <li><p>A PC capable of running ssh over the command line. This is natively supported on macOS and linux, but you will need to install openSSH on most Windows installations.</p></li>
+        <li><p>A Jailbreakable iOS device. This is in general one of the few ways to pentest iOS application that enforce certificate pinning. You can check to see if your device is jailbreakable <a href="https://docs.google.com/spreadsheets/d/11DABHIIqwYQKj1L83AK9ywk_hYMjEkcaxpIg6phbTf0/edit#gid=1014970938">here.</a></p></li>
+        </ul>
+          <h3>Tutorial</h3>
+        <ol>
+        <li><p>Begin by ensuring that your iOS device is Jailbroken and can access Cydia. This step is necessary in order to successfully follow this tutorial. This is not possible on all iOS devices and software versions, but new Jailbreak methods are constantly being researched, so keep yourself updated.</p></li>
+        <li><p>Install the following .deb files, or "tweaks" on your Jailbroken iOS device. Tutorials on how to install these files can be found elsewhere on the internet.</p></li>
+        <ul>
+          <li><a href="https://cydia.saurik.com/package/openssh/"><p>openSSH</p></a></li>
+          <li><a href="https://github.com/nabla-c0d3/ssl-kill-switch2"><p>SSL Kill Switch 2 (This allows your device to overcome the Certficate Pinning that many iOS application enforce in order to prevent security researchers from viewing their network traffic.)</p></a></li>
+        </ul>  
+        <li><p>Go into your iOS device settings, ensure that your device and your PC are on the same wifi network, and set the manual proxy values to "127.0.0.1" for the host and "8080" for the port.</p></li>
+         <img src="https://github.com/Healdb/healdb.tech/raw/master/blogImages/ios_proxy_settings.jpg" alt="iOS proxy settings"/>
+        <li><p>In your iOS settings, navigate to the SSL Killer preferences and ensure the switch marked "Disable Certificate Validation" is turned on.</p></li>
+        <img src="https://github.com/Healdb/healdb.tech/raw/master/blogImages/ssl_kill_settings.jpg" alt="iOS ssl killer settings"/>
+        <li><p>Install Burp Suite on your computer, you can use the community edition found <a href="https://portswigger.net/burp">here.</a></p></li>
+        <li><p>Download and install the libimobiledevice binaries onto your device. These binaries will allow you to communicate with your jailbroken iOS device through ssh. Windows binaries can be found <a href="http://docs.quamotion.mobi/docs/imobiledevice/">here.</a></p></li>
+        <li><p>Open and start Burp Suite, and ensure that the proxy server is running on 127.0.0.1, port 8080.</p></li>
+        <img src="https://github.com/Healdb/healdb.tech/raw/master/blogImages/burp_settings.PNG" alt="burp proxy settings"/>
+        <li><p>Connect your iOS device to your PC using an official Apple cable.</p></li>
+        <li><p>Open a terminal window, change your directory to wherever you downloaded the libimobiledevice binaries, and run the following command:</p></li>
+        <h5>iproxy 2222 22</h5>
+        <img src="https://github.com/Healdb/healdb.tech/raw/master/blogImages/iproxy_command.PNG" alt="iproxy cmd"/>
+        <li><p>In a separate terminal window, run the following command:</p></li>
+        <h5>ssh root@127.0.0.1 -p 2222 -R 127.0.0.1:8080:127.0.0.1:8080</h5>
+         <img src="https://github.com/Healdb/healdb.tech/raw/master/blogImages/ssh_command.PNG" alt="ssh cmd"/>
+        <li><p>This will prompt you for you iOS device's root password, which by default is "alpine". It is generally recommended that you change this using the "passwd" command once you are connected.</p></li>
+        <li><p>These two commands will first instruct iproxy to route all traffic on your PC directed at port 2222 to your iOS device's ssh listener on port 22. SSH will then connect to this local 2222 port, and instruct the device to begin routing all network traffic routed at 127.0.0.1:8080 to your PC's localhost network.</p></li>
+        <li><p>Once these commands have been run and the ssh command has connected to your iOS device successfully, navigate to "127.0.0.1:8080" on your iOS device.</p></li>
+        <img src="https://github.com/Healdb/healdb.tech/raw/master/blogImages/ios_burp_landing.jpg" alt="burp landing"/>
+        <li><p>If all the steps above were done correctly, and your Burp Proxy is running correctly on your PC, then you should be greeted with the Burp landing page, shown above. You may now follow the official Burp instructions on installing the configuration certificate <a href="https://portswigger.net/support/installing-burp-suites-ca-certificate-in-an-ios-device">here.</a></p></li>
+        <li><p>Once this is completed, try to navigate to some SSL-secured site and test if you can see the traffic in your Burp Proxy window. If everything was done correctly, it should have no problem connecting. If you do have errors, try closing the application and opening it again. There are a few applications however that the ssl-killer application does not seem to work with. If successful, you should start seeing traffic like below:</p></li>
+        <img src="https://github.com/Healdb/healdb.tech/raw/master/blogImages/burp_proxy.PNG" alt="burp proxy"/>
+          </ol>
+        <p>If you have any trouble with this tutorial, feel free to reach out to me at healdb2@gmail.com for support.</p>
+        
+        
+      </section>
+      <section id="main_content" class="inner">
+        <h2 id="netflixAPI">Database of Netflix ID's</h2>
+        <h3>Introduction</h3>
+        <p>A few years ago I wanted to make an application that gave the user the power to generate a random episode of any given US Netflix show. The main technical issue with this project was that Netflix does not have a public API and so matching each show or movie with the corresponding ID number found for in every episode or movie link was seemingly impossible. I however was able to find an API endpoint that allowed me to brute-force these ID #'s by simply sending thousands of requests. I have compiled this data into individual files.</p>
+        <p> There are two datasets available. One older dataset that was compiled back in 2017, and is probably out of date consists of the following:</p>
+        <ul>
+          <li><p>movietitles.txt - A TXT file containing all Netflix movie titles and associated ID number with seperator "$"</p></li>
+          <li><p>showtitles.txt - A TXT file containing all Netflix series titles and associated ID number with seperator "$"</p></li>
+          <li><p>series.zip - A ZIP file containing files with name corresponding to the ID numbers in series.csv. These files contain a variety of information on the show including all the episode names and ID's.</p></li>
+        </ul>
+        <p>The second dataset was compiled in September 2019 and consists of the following:</p>
+        <ul>
+          <li><p>movies.csv - A CSV file containing all Netflix movie titles and associated ID number</p></li>
+          <li><p>series.csv - A CSV file containing all Netflix series titles and associated ID number</p></li>
+          <li><p>series.zip - A ZIP file containing files with name corresponding to the ID numbers in series.csv. These files contain a variety of information on the show including all the episode names and ID's.</p></li>
+          <li><p>movies.zip - A ZIP file containing files with name corresponding to the ID numbers in movies.csv. These files contain a variety of information on the movie including rating, cast, category, etc.</p></li>
+        </ul>
+        <a href="https://bit.ly/2L65A1N"><p>Download the datasets here.</p></a>
+        <h3>Methodology</h3>
+        <p>In the interest in keeping too many people from accessing the Netflix API endpoint I used to gather these files, please email me at healdb2@gmail.com if you would like to know the methodology I used.</p>
+        </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        
+        <p class="copyright">healdb.tech maintained by <a href="https://github.com/Healdb">Healdb</a></p>
+        
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+  </body>
+</html>
+
