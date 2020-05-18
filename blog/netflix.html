@@ -1,1 +1,86 @@
 
+
+<!DOCTYPE html>
+<html lang="en-US">
+
+  <head>
+    
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" type="text/css" media="screen" href="/styles.css">
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Benjamin Heald | healdb.tech</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Benjamin Heald" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Benjamin Heald" />
+<meta property="og:description" content="Benjamin Heald" />
+<link rel="canonical" href="http://healdb.tech/" />
+<meta property="og:url" content="http://healdb.tech/" />
+<meta property="og:site_name" content="healdb.tech" />
+<script type="application/ld+json">
+{"@type":"WebSite","url":"http://healdb.tech/","name":"healdb.tech","description":"Benjamin Heald","headline":"Benjamin Heald","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163591048-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-163591048-1');
+</script>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <img src="https://raw.githubusercontent.com/Healdb/healdb.tech/master/Webp.net-resizeimage_1_75.jpg" alt="Image" />
+          <h2 id="project_tagline">Benjamin Heald Personal Security Blog</h2> 
+          <a class="active" href="/"><h3 class="active" id="project_tagline">WHOAMI and Current Resume<h3></a>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2 id="netflixAPI">Database of Netflix ID's</h2>
+        <h3>Introduction</h3>
+        <p>A few years ago I wanted to make an application that gave the user the power to generate a random episode of any given US Netflix show. The main technical issue with this project was that Netflix does not have a public API and so matching each show or movie with the corresponding ID number found for in every episode or movie link was seemingly impossible. I however was able to find an API endpoint that allowed me to brute-force these ID #'s by simply sending thousands of requests. I have compiled this data into individual files.</p>
+        <p> There are two datasets available. One older dataset that was compiled back in 2017, and is probably out of date consists of the following:</p>
+        <ul>
+          <li><p>movietitles.txt - A TXT file containing all Netflix movie titles and associated ID number with seperator "$"</p></li>
+          <li><p>showtitles.txt - A TXT file containing all Netflix series titles and associated ID number with seperator "$"</p></li>
+          <li><p>series.zip - A ZIP file containing files with name corresponding to the ID numbers in series.csv. These files contain a variety of information on the show including all the episode names and ID's.</p></li>
+        </ul>
+        <p>The second dataset was compiled in September 2019 and consists of the following:</p>
+        <ul>
+          <li><p>movies.csv - A CSV file containing all Netflix movie titles and associated ID number</p></li>
+          <li><p>series.csv - A CSV file containing all Netflix series titles and associated ID number</p></li>
+          <li><p>series.zip - A ZIP file containing files with name corresponding to the ID numbers in series.csv. These files contain a variety of information on the show including all the episode names and ID's.</p></li>
+          <li><p>movies.zip - A ZIP file containing files with name corresponding to the ID numbers in movies.csv. These files contain a variety of information on the movie including rating, cast, category, etc.</p></li>
+        </ul>
+        <a href="https://bit.ly/2L65A1N"><p>Download the datasets here.</p></a>
+        <h3>Methodology</h3>
+        <p>In the interest in keeping too many people from accessing the Netflix API endpoint I used to gather these files, please email me at healdb2@gmail.com if you would like to know the methodology I used.</p>
+        </section>
+          </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        
+        <p class="copyright">healdb.tech maintained by <a href="https://github.com/Healdb">Healdb</a></p>
+        
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+  </body>
+</html>
+
