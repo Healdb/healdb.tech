@@ -48,41 +48,14 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h2 id="TeradiciCVE">Teradici and CVE-2020-10965: An issue of routing.</h2>
-        <h3>Vendor and impacted product</h3>
-        <p><a href="https://www.teradici.com/">Teradici</a> - PCoIP Management Console version 20.01.0 and 19.11.1<p>
-        <h3>Introduction</h3>
-      <p>After nearly five years of working with Application Security I was finally able to discover a security bug worthy of a CVE.  This vulnerability was in a software package owned by a major vendor, Teradici, which provides management software for several different kinds of remote workstation setups. The impact of this bug is critical, with almost no attacker interaction needed. Once reported to Mitre, this vulnerability was issued CVE-2020-10965. Within this blog post, I'll be giving an overview of the discovery process.
-        <h3>Tools Used:
-        </h3>
-        <a href="https://portswigger.net/burp"><p>Burp Suite</p></a>
-        <a href="https://github.com/michenriksen/aquatone"><p>Aquatone</p></a>
-        <a href="https://www.google.com/chrome/"><p>Google Chrome</p></a>
-        <h3>Overview</h3>
-        <p>While participating in an undisclosed bug bounty program, I discovered a subdomain with the name "mc.****.************.com". Using Aquatone, I found that ports 80 and 443 were open and displaying the following login page.</p>
-        <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20login.png" alt="Teradici Login page"/>
-        <p> Seeing that the application was built using some kind of Javascript framework, I used the Chrome developer utilities to examine the routing files, to see if there were any interesting endpoints.</p>
-        <p> To my surprise, there was a route to an endpoint called "/login/resetadminpassword" that was not programmed to redirect back to the login page.</p>
-        <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20routing.png" alt="Teradici routing.js"/>
-        <p> Visiting this link, I was even more surprised to be presented with a form to reset the Admin user's password. Using this form, any unauthenticated user was able to change the admin user's password. </p>
-        <img src="https://github.com/Healdb/healdb.tech/raw/master/blog%20image%20reset%20admin.png" alt="Teradici Reset admin page"/>
-        
-        <h3>Impact</h3>
-        <p>From the Teradici disclosure, the impact was described as the following:</p>
-        <p>"The affected Management Console releases allow unauthenticated user access to the Management Console /login/resetadminpassword URL. From here, unauthenticated users can reset the admin password on the Management Console, and can take control of PCoIP Zero Clients and PCoIP Remote Workstation Cards managed by it."</p>
-        <h3>Disclosure Timeline</h3>
-        <h5>29 Feb 2020:</h5> <p>Reported vulnerability to bug bounty program, believing it to be specific to their installation.</p>
-        <h5>29 Feb 2020:</h5> <p>Reported vulnerability to Teradici, upon learning that the vulnerability affected the entire version.</p>
-        <h5>03 Mar 2020:</h5> <p>First response from Teradici, triaging the vulnerability.</p>
-        <h5>04 Mar 2020:</h5> <p>Teradici awards a bounty of $1000.</p>
-        <h5>05 Mar 2020:</h5> <p>Teradici releases patched version of product.</p>
-        <h5>07 Mar 2020:</h5> <p>Initial bug bounty program fixes their installation of the application, awarded $350.</p>
-        <h5>13 Mar 2020:</h5> <p>Teradici releases public notice of vulnerability on their website <a href="https://help.teradici.com/s/article/3729">here.</a></p>
-        <h3>References</h3>
-        <a href="https://help.teradici.com/s/article/3729"><p>Teradici Vulnerability Disclosure</p></a>
-        <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-10965"><p>MITRE CVE Notice</p></a>
-        <a href="https://nvd.nist.gov/vuln/detail/CVE-2020-10965"><p>National Vulnerability Database CVE Notice</p></a>
-        <p>
+        <h2 id="elevatetool">Elevate: A new tool for vertical domain discovery</h2>
+        <p>As more and more companies create bug bounty programs with open-ended scopes, vertical domain discovery becomes increasingly useful for bug bounty hunters. Companies such as Uber, Verizon Media, and Netflix all offer bounty rewards for security vulnerabilities found on any of their company-owned assets. Vertical domain discovery describes an attempt to find all domain names owned by a given company. These other domain names can be used to host internal services, microsites, or services outside the company's main domain name. Since they exist outside the central domain, these websites are often less secure, making them easy targets for penetration testers. I have personally found several vulnerable websites using this method, with it earning me about $15,000 in bounties over the past two years.</p>
+<p>Typically, vertical domain discovery needs to be done manually, with an attacker scraping WHOIS registry sites such as <a href="https://viewdns.info/">viewdns.info</a>, <a href="https://www.whoxy.com/">Whoxy</a>, or <a href="https://www.whoisxmlapi.com/"> WoisXMLAPI.com</a>. These websites house massive databases that constantly record the WHOIS registry information for newly registered domain names. Since domain names can be present in multiple databases, these need to be filtered out before they can be tested. Outdated information is also usually present in these databases. Since the manual process is arduous and slow, an automated solution is therefore needed.</p>
+<p>Elevate is a tool that automates the process of collecting domain names owned by a given company. This tool utilizes APIs from various sources to compile large domain lists. Users can search for domains by organization name, root domain name, or email address. An example usage of the tool, wherein we search for Reddit-owned domains, can be seen below.</p>
+<img href="https://raw.githubusercontent.com/Healdb/healdb.tech/master/blogImages/elevate.gif">
+        <h3>Release Link</h3>
+        <p>Full details on Elevate and its usage can be found on its Github page, found <a href="https://github.com/Healdb/Elevate">here.</a>
+
       </section>
           </div>
 
