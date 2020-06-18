@@ -1,0 +1,256 @@
+
+
+<!DOCTYPE html>
+<html lang="en-US">
+
+  <head>
+    
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" type="text/css" media="screen" href="/styles.css">
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Benjamin Heald | healdb.tech</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Benjamin Heald" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Benjamin Heald" />
+<meta property="og:description" content="Benjamin Heald" />
+<link rel="canonical" href="http://healdb.tech/" />
+<meta property="og:url" content="http://healdb.tech/" />
+<meta property="og:site_name" content="healdb.tech" />
+<script type="application/ld+json">
+{"@type":"WebSite","url":"http://healdb.tech/","name":"healdb.tech","description":"Benjamin Heald","headline":"Benjamin Heald","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163591048-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-163591048-1');
+</script>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <img src="https://raw.githubusercontent.com/Healdb/healdb.tech/master/Webp.net-resizeimage_1_75.jpg" alt="Image" />
+          <h2 id="project_tagline">Benjamin Heald Personal Security Blog</h2> 
+          <a class="active" href="/"><h3 class="active" id="project_tagline">WHOAMI and Current Resume<h3></a> <a class="active" href="/blog/"><h3 class="active" id="project_tagline">Blog Posts<h3></a>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2 id="parseSecurity">The problem with Parse: A low-code server that endangers over 8,000,000 users.</h2>
+        <h3>Introduction</h3>
+      <p>The Parse Platform is a popular web server <a href="https://blog.back4app.com/parse-vs-firebase/">similar to Firebase</a> that allows mobile application developers to spin up a fully fledged backend with API support within a very short amount of time and with very little programming experience. Parse was created back in 2011 as a paid service that eventually shut down after being acquired by Facebook in 2017. Since then, the Parse Platform has existed as an open-source "parse server" module for Node/Express. Several popular hosting platforms offer guides on how to quickly set up a Parse Server on their infrastructure, including <a href="https://aws.amazon.com/blogs/mobile/how-to-set-up-parse-server-on-aws-using-aws-elastic-beanstalk/">AWS</a>, and <a href="https://herokuapp.com/parse">Heroku.</a></p><p> I first became aware of Parse after encountering it while participating in a Fortune 500 internet companies' public bug bounty program. A social media application that this company created used Parse, and I was able to exploit many security issues that I later discovered were inherent to the design of the Parse Platform. In just a few days of scanning the most popular Google Play applications, I was able to discover several vulnerable Parse instances that potentially endanger the data of a collective 8,000,000 users. In this blog post I will give an overview of the many security issues inherent in the Parse platform, as well as give recommendations to both developers and the maintainers of the Parse Platform for how to improve their security posture.</p>
+	  <h3>Parse functionality overview</h3>
+	  <p>The Parse Server operates on a simple object-oriented model. All data within Parse is stored within different "objects". The developer may create their own objects or use the several default objects, such as <code>Users</code> to save data to. Data is queried from these objects by referencing either the object's ID number or by searching using regex. Below is a simple example of how a developer would interact with their Parse server to create a new object called <code>Tenant</code>.</p>
+	  <p>To begin, the developer would send a <code>POST</code> HTTP request to their Parse server instance with their Application ID in a request header and the desired data of the object they want to insert into their database.</p>
+	  <pre style="background-color: #f2f2f2;">
+	  
+	  <code style="background-color: #fff;">POST /parse/classes/Tenant HTTP/1.1
+Host: api.examplehost.com
+X-Parse-Application-Id: EXAMPLE_APPLICATION_ID
+
+{"address":"221B Baker St.","tenantName":"S. Holmes","monthlyRent":650}</code>
+	  </pre>
+	  <p>The Parse server will respond to this, assigning an objectId for the newly created instance of the <code>Tenant</code> class.</p>
+	  	  <pre style="background-color: #f2f2f2;">
+	  
+	  <code style="background-color: #fff;">{
+  "objectId": "7ndhYbFGEW",
+  "createdAt": "2020-08-23T12:45:51.080Z"
+}</code>
+	  </pre>
+	  <p>The developer can then insert more data into the <code>Tenant</code> class. This process can also be done through the Parse Server GUI dashboard, as explained <a href="https://github.com/parse-community/parse-dashboard">here</a>.</p>
+	  <p>In order to retrieve this instance of the <code>Tenant</code> class, it must be referenced by the Object ID, as seen below.</p>
+	  	  <pre style="background-color: #f2f2f2;">
+	  
+	  <code style="background-color: #fff;">GET /parse/classes/Tenant/7ndhYbFGEW HTTP/1.1
+Host: api.examplehost.com
+X-Parse-Application-Id: EXAMPLE_APPLICATION_ID
+
+</code>
+	  </pre>
+	  <p>The server will then respond with the data for that instance.</p>
+	  <pre style="background-color: #f2f2f2;">
+	  
+	  <code style="background-color: #fff;">{
+  "objectId": "7ndhYbFGEW",
+  "address":"221B Baker St.",
+  "tenantName":"S. Holmes",
+  "monthlyRent":650,
+  "updatedAt": "2020-08-23T12:45:51.080Z",
+  "createdAt": "2020-08-23T12:45:51.080Z"
+}</code>
+	  </pre>
+	  <p><h5>This next feature is where the security issues with Parse become apparent.</h5> By issuing a <code>GET</code> request to the class object, the developer, or anyone else using the Parse application, can retrieve all instances of the <code>Tenant</code> object.</p>
+	  	  	  <pre style="background-color: #f2f2f2;">
+	  
+	  <code style="background-color: #fff;">GET /parse/classes/Tenant/ HTTP/1.1
+Host: api.examplehost.com
+X-Parse-Application-Id: EXAMPLE_APPLICATION_ID
+
+</code>
+	  </pre>
+	  	  </pre>
+	  <p>The server will then respond with the data for all instances of the <code>Tenant</code> class.</p>
+	  <pre style="background-color: #f2f2f2;">
+	  
+	  <code style="background-color: #fff;">{
+  "results": [
+		{
+		  "objectId": "7ndhYbFGEW",
+		  "address":"221B Baker St.",
+		  "tenantName":"S. Holmes",
+		  "monthlyRent":650,
+		  "updatedAt": "2020-08-23T12:45:51.080Z",
+		  "createdAt": "2020-08-23T12:45:51.080Z"
+		}
+		{
+		  "objectId": "8sdjZcKJJH",
+		  "address":"5 Main St.",
+		  "tenantName":"P. Moriarty",
+		  "monthlyRent":1650,
+		  "updatedAt": "2020-08-23T12:45:51.080Z",
+		  "createdAt": "2020-08-23T12:45:51.080Z"
+		}
+		{
+		  "objectId": "2atxIpLMSK",
+		  "address":"188 Thomas Ln.",
+		  "tenantName":"I. Adler",
+		  "monthlyRent":1650,
+		  "updatedAt": "2020-08-23T12:45:51.080Z",
+		  "createdAt": "2020-08-23T12:45:51.080Z"
+		}
+	]
+}</code>
+	  </pre>
+	  
+	  
+	  
+	  
+	  <h3>The problems with Parse</h3>
+	  <h4>Data security features turned off by default</h4>
+	  <p> The Parse Platform goes to great lengths to enable non-technical developers to  produce a full mobile application backend with little to no programming. Most if not all server setup including the class creation and insertion enumerated above can be done from their Parse Server GUI dashboard, as explained in their documentation <a href="https://github.com/parse-community/parse-dashboard">here</a>. </p>
+	  <p>As outlined in the section above, all data stored within Parse is contained within class objects, with all user data being stored in the default <code>users</code> class. Obviously, the data stored within these class objects should not be searchable by default, especially if they contain sensitive information. Parse does in fact allow the developer to restrict access to these classes through the <a href="http://docs.parseplatform.org/rest/guide/#class-level-permissions">Class-Level Permissions</a> and <a href="http://docs.parseplatform.org/rest/guide/#object-level-access-control">Object-Level Access Control</a>. These two security features can offer a fine-grained level of control to the data stored within an instance of Parse, including preventing anonymous users from retireving all instances of a given class. Unfortunately, the information on how to use these security measures is buried on a non-central documentation page <a href="http://docs.parseplatform.org/rest/guide/#security">here.</a></p>
+	  <p>The problem however is simple: <h6>Parse Server does not enable any of these security features by default.</h6> Even default classes that will obviously be used to contain sensitive data, such as the <code>users</code> class can be retrieved anonymously. To cite the Parse Server documentation:</p>
+	  <img src="https://raw.githubusercontent.com/Healdb/healdb.tech/master/blogImages/parse-default-security%20(1).png">
+	  <p>Since these security measures are turned off by default, <h6>All Parse class objects, including the obviously sensitive <code>users</code> class, can be searched and retrieved by anonymous users.</h6></p>
+	  <p>Since the Parse Platform brands itself as way in which non-technical developers can quickly and easily create a mobile application backend, it seems irresponsible to turn off all security measures by default when a major part of the clientele will not know enough about information security to implement them correctly. This hypothesis is confirmed later on in this article by observing the number of vulnerable Parse instances in the wild.</p>
+	  
+	  <h4>Unrestricted file upload</h4>
+	  <p>A second, just as dangerous vulnerability exists in the Parse Server design in the form of the File Adapter submodule. By default, all file types are allowed to be uploaded by the Parse server and uploaded files require no authentication headers to access, and can therefore be shared freely by an attacker. The only security mitigation implemented in the file upload functionality is the obfuscation of the uploaded file name. While this may prevent files uploaded to the bucket from being easily found, it does not prevent an attacker from uploading malicious files, such as HTML, to the server and sharing the URL with their victims. There are hooks that the user can program to prevent the upload of certain file types, but the documentation for this exists only for <a href="https://docs.parseplatform.org/cloudcode/guide/#beforesavefile-triggers">Parse Cloud</a>, and may only be effective with that plugin. There is currently no known way to implement this through the Parse Dashboard, the GUI that many developers use to create their Parse application. This issue has been raised several times in the last five years to the developers of Parse, but has been dismissed each time:</p>
+	  <p style="margin: 10px 0 0px 0;"><a href="https://github.com/parse-community/parse-server/issues/2137">"This is the expected behavior. Historically, on parse.com, the files upload is open to all clients."</a></p>
+	  <p style="margin: 0px 0 15px 0;">- response to a Git issue on why Parse Server allows anonymous file upload by default. (2016)</p>
+	  <p style="margin: 10px 0 0px 0;"><a href="https://github.com/parse-community/parse-server/issues/4418">"I'm not saying the current solution is perfect, but the obfuscation of the name is for now good enough."</a></p>
+	 <p style="margin: 0px 0 15px 0;">	  - response to a Git issue on why Parse Server does not have any access control, such as authentication headers, for uploaded files. (2017)</p>
+	  <p>Since most applications serve uploaded parse files from their main domain, this creates severe vulnerabilities for all users of such an application. If the application includes a cookie-based web portal on the same domain that they serve their Parse-uploaded files from, the security of all these users are put at risk from this "feature". This is again an instance of the Parse developers putting ease of development ahead of user security.</p>
+	  
+	  <h3>Exploiting Parse security issues</h3>
+	  <p>In most cases, all an attacker needs to exploit a vulnerable Parse Server is the public <code>Parse-Application-Id</code>. This ID string can usually be found in the application's APK files, or in the javascript of a web application. Alternatively, you could just intercept the outgoing requests from the application and retrieve it from the request headers. This ID is the only thing the Parse Server usually requires in order to both upload files and query the various class objects stored in the application. Some applications enforce that a user must have a authenticated <code>Parse-Session-Token</code> header as well, but these are available to all logged-in users of the application and can be easily retrieved by simply making an account on the platform.</p>
+	  <h4>Reading all data in a Parse class</h4>
+	  <p>The following POC request will return a JSON array of the User data in the Parse instance. This usually includes data like phone numbers, email addresses, full names, addresses, and sometimes even session tokens.</p>
+	  <pre style="background-color: #f2f2f2;">
+	  
+	  <code style="background-color: #fff;">GET /parse/users HTTP/1.1
+Host: api.examplehost.com
+X-Parse-Application-Id: EXAMPLE_APPLICATION_ID</code>
+	  </pre>
+	  <h4>Unrestricted File Upload</h4>
+	  <p>If the Parse instance utilizes the File Adapter submodule, then any anonymous attacker can send the following POST request in order to upload a file of any type to the Parse instance. It should be noted that since Parse serves the uploaded files with the response header <code>Content-Disposition: attachment;</code>, no known RCE vulnerabilities exist here. Image and HTML files however will be served to the client in all major browsers. The following POC request will upload a TXT file to the server, with the server's response containing the fully accessible URL of the uploaded file. The file type can be changed by changing the extension in the URL or the "content-type" header.</p>
+	  <pre style="background-color: #f2f2f2;">
+	  
+	  <code style="background-color: #fff;">POST /parse/files/test.html HTTP/1.1
+Host: api.examplehost.com
+X-Parse-Application-Id: EXAMPLE_APPLICATION_ID
+Content-Type: text/html
+	  
+Insecure Parse Server!</code>
+	  </pre>
+	  
+	  <h3>The vulnerability of Parse instances in the wild</h3>
+	  <p>By analyzing the top 1000 android application in the social media and business categories of the Google Play store, it was found that several extremely popular application are currently using misconfigured and vulnerable Parse Server instances. A total of 8,100,000 users have downloaded this subset of vulnerable applications, which gives an idea of the impact insecure Parse servers can have. These applications were found in the space of a single afternoon with a simple Python script, and it is very likely that hundreds more applications exist, though likely with smaller user bases.</p>
+	  <table>
+	  <tr>
+		<th>Application Type</th>
+		<th>Application Downloads on the Google Play store</th>
+		<th>Vulnerabilities</th>
+		<th>Vendor Contacted</th>
+	  </tr>
+	  <tr>
+		<td>Social Media</td>
+		<td>5,000,000+</td>
+		<td>Unrestricted file upload to main domain</td>
+		<td>Vendor Emailed</td>
+	  </tr>
+	  <tr>
+		<td>Social Media</td>
+		<td>1,000,000+</td>
+		<td>Unrestricted file upload to main domain, Read access to all User data</td>
+		<td>Vendor Emailed</td>
+	  </tr>
+	  <tr>
+		<td>Productivity</td>
+		<td>1,000,000+</td>
+		<td>Read access to all User data</td>
+		<td>Vendor Emailed and Contact Form</td>
+	  </tr>
+	  <tr>
+		<td>Social Media</td>
+		<td>500,000+</td>
+		<td>Read access to all User data</td>
+		<td>Vendor Emailed</td>
+	  </tr>
+	  <tr>
+		<td>Dating</td>
+		<td>500,000+</td>
+		<td>Read access to all User data</td>
+		<td>Vendor Emailed</td>
+	  </tr>
+	  <tr>
+		<td>Dating</td>
+		<td>100,000+</td>
+		<td>Read access to all User data</td>
+		<td>Vendor Emailed</td>
+	  </tr>
+	</table>
+	<p>To date, none of these vendors have responded.</p>
+	<h3>How to secure Parse</h3>
+	<p>The good news for developers is that your Parse instance can largely be secured from the vulnerabilities listed above. Through the proper implementation of the Class-level permissions and the Object-Level access permissions as detailed in the Parse documentation <a href="http://docs.parseplatform.org/rest/guide/#security">here</a>, user and other class data can be properly secured and protected against attack.</p>
+	<p>Unfortunately, in order to implement a mitigation of the unrestricted file upload vulnerability, a more complex fix will need to be implemented. This can be enforced at the bucket level, as suggested by the Parse developers. Guides on how to restrict the file upload types for some of the main hosting providers can be found here:</p>
+	<ul>
+	<li><a href="https://aws.amazon.com/premiumsupport/knowledge-center/s3-allow-certain-file-types/">AWS S3</a></li>
+	<li><a href="https://cloud.google.com/storage/docs/authentication/signatures#policy-document">Google Cloud Storage</a></li>
+	</ul>
+	<h3>How Parse can improve</h3>
+	<p>The idea that all security components should be enabled by default is one of the key ideas of a secure application. This is increasingly relevant in a web server that advertises itself as a low to no-code server implementation. Since a large subset of Parse users are unfamiliar with the basics of secure application development, all Parse class and object-based security measures should by default be enabled. This is especially true for the default <code>users</code> Parse class, which by default allows read access to all data within the class. If security features will not be implemented for all classes, they should at least be turned on by default for the <code>users</code> class.</p>
+	<p>Enforcing the need for authentication headers to access uploaded files would enforce ACL rules for the Parse instance and limit the possibility of an attacker sharing maliciously uploaded files with the world at large. An easy-to use security feature similar to the CLP and OLA functionality that already exists in the Parse Dashboard should also be programmed to limit the types of files that can be uploaded to the parse instance.</p>
+	<h3>Conclusions</h3>
+	<p>The Parse Platform provides an essential service: allowing non-technical and skilled developers to create a complex mobile application backend API with little to no programming. The usability of this service is great, and overall is a very useful product to millions of users. The security issues I have outlined above unfortunately expose glaring oversights in the security of Parse and endanger the data and security of millions. By implementing proper by-default access controls and fixing the default unrestricted file upload vulnerability, the usability and security of the Parse platform will hopefully become widespread. Please contact me at <a href="mailto:healdb2@gmail.com">healdb2@gmail.com</a> if you have any thoughts on Parse security, or suggestions on how I can make this guide better. Thanks for reading!</p>
+	<h4>Disclaimer</h4>
+	<p>The information in this article is provided “AS IS” with no warranties, and confers no rights. This article does not represent the thoughts, intentions, plans or strategies of my employer. It is solely my opinion. This article is intended for educational purposes only and cannot and should not be used for law violation or personal gain. The author of this project is not responsible for any possible harm caused by the materials.</p>
+      </section>
+          </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        
+        <p class="copyright">healdb.tech maintained by <a href="https://github.com/Healdb">Healdb</a></p>
+        
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+  </body>
+</html>
