@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="/styles.css">
 
 <!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Benjamin Heald | healdb.tech</title>
+<title>The problem with Parse</title>
 <meta name="generator" content="Jekyll v3.8.5" />
 <meta property="og:title" content="Benjamin Heald" />
 <meta property="og:locale" content="en_US" />
@@ -48,9 +48,9 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h2 id="parseSecurity">The problem with Parse: A low-code server that endangers over 8,000,000 users.</h2>
+        <h2 id="parseSecurity">The problem with Parse: A low-code server that endangers over 63,000,000 users.</h2>
         <h3>Introduction</h3>
-      <p>The Parse Platform is a popular web server <a href="https://blog.back4app.com/parse-vs-firebase/">similar to Firebase</a> that allows mobile application developers to spin up a fully fledged backend with API support within a very short amount of time and with very little programming experience. Parse was created back in 2011 as a paid service that eventually shut down after being acquired by Facebook in 2017. Since then, the Parse Platform has existed as an open-source "parse server" module for Node/Express. Several popular hosting platforms offer guides on how to quickly set up a Parse Server on their infrastructure, including <a href="https://aws.amazon.com/blogs/mobile/how-to-set-up-parse-server-on-aws-using-aws-elastic-beanstalk/">AWS</a>, and <a href="https://herokuapp.com/parse">Heroku.</a></p><p> I first became aware of Parse after encountering it while participating in a Fortune 500 internet companies' public bug bounty program. A social media application that this company created used Parse, and I was able to exploit many security issues that I later discovered were inherent to the design of the Parse Platform. In just a few days of scanning the most popular Google Play applications, I was able to discover several vulnerable Parse instances that potentially endanger the data of a collective 8,000,000 users. In this blog post I will give an overview of the many security issues inherent in the Parse platform, as well as give recommendations to both developers and the maintainers of the Parse Platform for how to improve their security posture.</p>
+      <p>The Parse Platform is a popular web server <a href="https://blog.back4app.com/parse-vs-firebase/">similar to Firebase</a> that allows mobile application developers to spin up a fully fledged backend with API support within a very short amount of time and with very little programming experience. Parse was created back in 2011 as a paid service that eventually shut down after being acquired by Facebook in 2017. Since then, the Parse Platform has existed as an open-source "parse server" module for Node/Express. Several popular hosting platforms offer guides on how to quickly set up a Parse Server on their infrastructure, including <a href="https://aws.amazon.com/blogs/mobile/how-to-set-up-parse-server-on-aws-using-aws-elastic-beanstalk/">AWS</a>, and <a href="https://herokuapp.com/parse">Heroku.</a></p><p> I first became aware of Parse after encountering it while participating in a Fortune 500 internet companies' public bug bounty program. A social media application that this company created used Parse, and I was able to exploit many security issues that I later discovered were inherent to the design of the Parse Platform. In just a few days of scanning the most popular Google Play applications, I was able to discover several vulnerable Parse instances that potentially endanger the data of a collective 63,000,000 users. In this blog post I will give an overview of the many security issues inherent in the Parse platform, as well as give recommendations to both developers and the maintainers of the Parse Platform for how to improve their security posture.</p>
 	  <h3>Parse functionality overview</h3>
 	  <p>The Parse Server operates on a simple object-oriented model. All data within Parse is stored within different "objects". The developer may create their own objects or use the several default objects, such as <code>Users</code> to save data to. Data is queried from these objects by referencing either the object's ID number or by searching using regex. Below is a simple example of how a developer would interact with their Parse server to create a new object called <code>Tenant</code>.</p>
 	  <p>To begin, the developer would send a <code>POST</code> HTTP request to their Parse server instance with their Application ID in a request header and the desired data of the object they want to insert into their database.</p>
@@ -178,13 +178,19 @@ Insecure Parse Server!</code>
 	  </pre>
 	  
 	  <h3>The vulnerability of Parse instances in the wild</h3>
-	  <p>By analyzing the top 1000 android application in the social media and business categories of the Google Play store, it was found that several extremely popular application are currently using misconfigured and vulnerable Parse Server instances. A total of 8,100,000 users have downloaded this subset of vulnerable applications, which gives an idea of the impact insecure Parse servers can have. These applications were found in the space of a single afternoon with a simple Python script, and it is very likely that hundreds more applications exist, though likely with smaller user bases.</p>
+	  <p>By analyzing the top 1000 android application in the social media and business categories of the Google Play store, it was found that several extremely popular application are currently using misconfigured and vulnerable Parse Server instances. A total of 63,100,000 users have downloaded this subset of vulnerable applications, which gives an idea of the impact insecure Parse servers can have. These applications were found in the space of a single afternoon with a simple Python script, and it is very likely that hundreds more applications exist, though likely with smaller user bases.</p>
 	  <table>
 	  <tr>
 		<th>Application Type</th>
 		<th>Application Downloads on the Google Play store</th>
 		<th>Vulnerabilities</th>
 		<th>Vendor Contacted</th>
+	  </tr>
+	<tr>
+		<td>Mobile Game</td>
+		<td>55,000,000+</td>
+		<td>Unrestricted file upload to main domain, Read access to all User data</td>
+		<td>Vendor Emailed</td>
 	  </tr>
 	  <tr>
 		<td>Social Media</td>
