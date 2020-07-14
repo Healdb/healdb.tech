@@ -1,0 +1,434 @@
+
+
+<!DOCTYPE html>
+<html lang="en-US">
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" type="text/css" media="screen" href="/styles.css">
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>What do they know? An analysis of mobile application data collection.</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="What do they know? An analysis of mobile application data collection." />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Benjamin Heald" />
+<meta property="og:description" content="Benjamin Heald" />
+<link rel="canonical" href="http://healdb.tech/" />
+<meta property="og:url" content="http://healdb.tech/" />
+<meta property="og:site_name" content="healdb.tech" />
+
+<!-- Twitter data -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@heald_ben">
+<meta name="twitter:title" content="What do they know? An analysis of mobile application data collection.">
+    <meta name="twitter:description" content="Mobile application data collection.">
+    <meta name="twitter:creator" content="@heald_ben">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Healdb/healdb.tech/master/blogImages/phonequestion.png">
+
+<!-- Open Graph data -->
+<meta property="og:title" content="What do they know? An analysis of mobile application data collection." />
+    <meta property="og:description" content="Mobile application data collection.">
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://healdb.tech/blog/appData.html" />
+<meta property="og:image" content="https://raw.githubusercontent.com/Healdb/healdb.tech/master/blogImages/phonequestion.png" />
+
+<script type="application/ld+json">
+{"@type":"WebSite","url":"http://healdb.tech/","name":"healdb.tech","description":"Benjamin Heald","headline":"Benjamin Heald","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163591048-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-163591048-1');
+</script>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <img src="https://raw.githubusercontent.com/Healdb/healdb.tech/master/Webp.net-resizeimage_1_75.jpg" alt="Image" />
+          <h2 id="project_tagline">Benjamin Heald Personal Security Blog</h2> 
+          <a class="active" href="/"><h3 class="active" id="project_tagline">WHOAMI and Current Resume<h3></a> <a class="active" href="/blog/"><h3 class="active" id="project_tagline">Blog Posts<h3></a>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2 id="appData">What do they know?</h2>
+		<h2>An analysis of mobile application data collection</h2>
+        <p>In the past few months, I have seen a great deal of media attention about how the TikTok application collects a variety of information about their user's devices and the implications that collection has to personal security. While I have seen several suspect things about the data collection that TikTok performs, it is by no means the only mobile application that collects an unreasonable amount of data. I have been doing mobile application penetration testing for several years, and mobile phone data collection is almost obligatory. This data is collected mainly for internal company use or sold to advertisers.</p>
+        <p>In this blog post, I have created a table that outlines the types of data that some of the most popular mobile applications in the US collect. This data is collected by the applications every time that you open the application, whether or not you actually use the application. This table contains only a few of my most used applications, and if you have any suggestions for more I could add, please let me know <a href="https://twitter.com/heald_ben">on twitter.</a></p>
+		<table style="text-align: center;margin-left:auto; margin-right:auto;">
+	  <tr>
+		<th>Data Type</th>
+		<th>Uber</th>
+		<th>Yahoo Mobile</th>
+		<th>Fight List</th>
+		<th>Skype</th>
+		<th>Chick-fil-a</th>
+		<th>Grubhub</th>
+		<th>Starbucks</th>
+		<th>Duolingo</th>
+		<th>Doordash</th>
+		<th>Poshmark</th>
+		<th>Disney+</th>
+		<th>Venmo</th>
+	  </tr>
+	<tr>
+		<td>IP address</td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+	  </tr>
+	  <tr>
+		<td>Network Name</td>
+		<td>X</td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	  </tr>
+	  <tr>
+		<td>Device Name</td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+	  </tr>
+	  <tr>
+		<td>Location</td>
+		<td>X</td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	  </tr>
+	  <tr>
+		<td>Altitude</td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	  </tr>
+	  <tr>
+		<td>Phone Carrier Information</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td>X</td>
+		<td>X</td>
+		<td></td>
+	  </tr>
+	  <tr>
+		<td>Time Zone</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+	  </tr>
+	  <tr>
+		<td>Phone Model</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+	  </tr>
+	  <tr>
+		<td>Phone OS Version</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+	  </tr>
+	  <tr>
+		<td>CPU Type</td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	  </tr>
+	  <tr>
+		<td>Wearing Headphones?</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	  </tr>
+	  <tr>
+		<td>Device Rooted Status</td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	  </tr>
+	  <tr>
+		<td>Device Volume</td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	  </tr>
+	  <tr>
+		<td>Free Space on Device</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	  </tr>
+	  <tr>
+		<td>Screen Size</td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+		<td></td>
+		<td>X</td>
+		<td>X</td>
+		<td>X</td>
+	  </tr>
+	  <tr>
+		<td>Device Battery Level</td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	  </tr>
+	  <tr>
+		<td>Device Charging?</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	  </tr>
+	  <tr>
+		<td>Free Memory on Device</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	  </tr>
+	  <tr>
+		<td>Phone Orientation</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+	  </tr>
+	  <tr>
+		<td>Screen Brightness</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	  </tr>
+	  <tr>
+		<td>Accelerometer</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	  </tr>
+	  <tr>
+		<td>Other Installed Application Information</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>X</td>
+		<td></td>
+		<td></td>
+	  </tr>
+	</table>
+		<p>From this table, you can see that some of the worst offenders are Uber, Duolingo, and Chick-fil-a. The worst data types in my mind are device name, which by default contains the user's first name, the device's IP address, and data that together could be used to identify the activities of the user, such as accelerometer, brightness, phone orientation, and device charging status.</p>
+		<p>For privacy reasons, I cannot release the exact outgoing requests that contained this data, but if you would like to verify the information contained within this blog, please contact me through email or <a href="https://twitter.com/heald_ben">on twitter</a>.
+      </section>
+          </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        
+        <p class="copyright">healdb.tech maintained by <a href="https://github.com/Healdb">Healdb</a></p>
+        
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+  </body>
+</html>
