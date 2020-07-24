@@ -169,12 +169,13 @@ X-Parse-Application-Id: EXAMPLE_APPLICATION_ID</code>
 	  <p>If the Parse instance utilizes the File Adapter submodule, then any anonymous attacker can send the following POST request in order to upload a file of any type to the Parse instance. It should be noted that since Parse serves the uploaded files with the response header <code>Content-Disposition: attachment;</code>, no known RCE vulnerabilities exist here. Image and HTML files however will be served to the client in all major browsers. The following POC request will upload a TXT file to the server, with the server's response containing the fully accessible URL of the uploaded file. The file type can be changed by changing the extension in the URL or the "content-type" header.</p>
 	  <pre style="background-color: #f2f2f2;">
 	  
-	  <code style="background-color: #fff;">POST /parse/files/test.html HTTP/1.1
+	  <code style="background-color: #fff;">POST /parse/users HTTP/1.1
 Host: api.examplehost.com
+Content-Type: application/json; charset=utf-8
+Accept: */*
 X-Parse-Application-Id: EXAMPLE_APPLICATION_ID
-Content-Type: text/html
-	  
-Insecure Parse Server!</code>
+
+{"limit":"1000","where":{"username":{"$regex":"@hackerone.com"}},"_method":"GET"}</code>
 	  </pre>
 		
 			  <pre style="background-color: #f2f2f2;">
